@@ -78,53 +78,42 @@ int main() {
   printf("===========================================\n");
   printf("생활관 호실 배정 프로그램\n");
   printf("===========================================\n");
+  
   while (1) {
+    if (mcount + wcount >= 10) {
+      if (!error) {
+        printf("정원 초과입니다. 등록불가!\n");
+        error = 1;
+      }
+      break; // 에러처리
+    }
     printf("메뉴 : 1.남학생 등록 2.여학생 등록 0.종료 > ");
     scanf("%d", &menu);
-
     if (menu == 0)
       break;
-    
-      
-    // 총원 10명이상시 에러처리는 조건문으로 해결
     else if (menu == 1) {
-      if (mcount + wcount >= 10 && !error) {
-        printf("정원 초과입니다. 등록불가!\n");
-        error =1;
-        continue;
-      }
       printf("학생 이름은? > ");
       scanf("%s", mnames[mcount]);
       int roomno = findRoom(person[0]);
       mroom[mcount] = 100 + roomno;
       printf("%s 학생 %d호실 배정되었습니다.\n", mnames[mcount], mroom[mcount]);
-
       //업데이트
       person[0][roomno - 1]++;
-
       mcount++;
     } else if (menu == 2) {
-      if (wcount + mcount >= 10 && !error) {
-        printf("정원 초과입니다. 등록불가!\n");
-        error =1;
-        continue;
-      }
       printf("학생 이름은? > ");
       scanf("%s", wnames[wcount]);
       int roomno = findRoom(person[1]);
       wroom[wcount] = 200 + roomno;
       printf("%s 학생 %d호실 배정되었습니다.\n", wnames[wcount], wroom[wcount]);
-      //업데이트
+      // 업데이트 
       person[1][roomno - 1]++;
-
       wcount++;
     }
   }
-
   printf("===========================================\n");
   printf("생활관 호실 배정 결과는 다음과 같습니다.\n");
   printf("===========================================\n");
   printReport(mnames, mroom, mcount, wnames, wroom, wcount);
-
   return 0;
-}
+  }
