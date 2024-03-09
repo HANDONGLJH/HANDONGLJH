@@ -72,6 +72,8 @@ int main() {
   int mcount = 0, wcount = 0; // 인원 합계 (남, 여)
   int menu;
 
+  int error=0;
+
   srand(time(0));
   printf("===========================================\n");
   printf("생활관 호실 배정 프로그램\n");
@@ -82,10 +84,13 @@ int main() {
 
     if (menu == 0)
       break;
-    // 10명이상 정원초과가 남+여 총원으로 이해하여 코드 수정
+    
+      
+    // 총원 10명이상시 에러처리는 조건문으로 해결
     else if (menu == 1) {
-      if (mcount + wcount >= 10) {
+      if (mcount + wcount >= 10 && !error) {
         printf("정원 초과입니다. 등록불가!\n");
+        error =1;
         continue;
       }
       printf("학생 이름은? > ");
@@ -99,8 +104,9 @@ int main() {
 
       mcount++;
     } else if (menu == 2) {
-      if (wcount + mcount >= 10) {
+      if (wcount + mcount >= 10 && !error) {
         printf("정원 초과입니다. 등록불가!\n");
+        error =1;
         continue;
       }
       printf("학생 이름은? > ");
