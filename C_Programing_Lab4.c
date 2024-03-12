@@ -3,7 +3,6 @@
 #include <string.h>
 #include <time.h>
 
-char kname[2][10] = {"A+~F", "P/F"}; // String for grading
 struct st_class {
   int code;      // class code
   char name[30]; // class name
@@ -11,205 +10,245 @@ struct st_class {
   int grading;   // grading (1:A+~F, 2:P/F)
 };
 
-void LoadData(struct st_class *c[], int *csize) {
-  // Load data from file into array of struct st_class
-  // Implementation provided
+char kname[2][10] = {"A+~F", "P/F"}; // String for grading
+
+// 1 ok
+
+int loadData(struct st_class *c[]) {
+  int count = 0;
+  FILE *file;
+
+  file = fopen("classes.txt", "r");
+  while (!feof(file)) {
+    c[count] = (struct st_class *)malloc(sizeof(struct st_class));
+    int r = fscanf(file, "%d %s %d %d", &(c[count]->code), c[count]->name,
+                   &(c[count]->unit), &(c[count]->grading));
+    if (r < 4)
+      break;
+    count++;
+  }
+  fclose(file);
+  return count;
 }
 
+// ok
 void printAllClasses(struct st_class *c[], int csize) {
-  // Print all classes
-  // Implementation provided
+  for (int i = 0; i < csize; i++) {
+    printf("[%d] %s [credit %d - %s]\n", c[i]->code, c[i]->name, c[i]->unit,
+           kname[c[i]->grading - 1]);
+  }
 }
 
-int addNewClass(struct st_class *c[], int csize) {
-  // Add a new class
-  // Additional implementation required to check for duplicate class code
-  int newCode;
-  char newName[30];
-  int newUnit;
-  int newGrading;
-
-  printf("Enter new class code: ");
-  scanf("%d", &newCode);
-
-  // Check if the class code already exists
+// 7 ok
+void saveAllClasses(struct st_class *c[], int csize) {
+  FILE *file;
+  file = fopen("classes.txt", "w");
   for (int i = 0; i < csize; i++) {
-    if (c[i]->code == newCode) {
-      printf("Error: Class code already exists\n");
+    fprintf(file, "%d %s %d %d\n", c[i]->code, c[i]->name, c[i]->unit,
+            c[i]->grading);
+  }
+  fclose(file);
+}
+
+// 4  ok
+void findClasses(char *name, struct st_class *c[], int csize) {
+  int count = 0;
+  printf("Searching (keyword: %s)\n", name);
+  for (int i = 0; i < csize; i++) {
+    if (strstr(c[i]->name, name)) {
+      printf("[%d] %s [credit %d - %s]\n", c[i]->code, c[i]->name, c[i]->unit,
+             kname[c[i]->grading - 1]);
+      count++;
+    }
+  }
+  printf("%d classes found.\n", count);
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+
+// 2 
+int addNewClass(struct st_class *c[], int csize) {
+  struct st_class *p = (struct st_class *)malloc(sizeof(struct st_class));
+
+  printf(">> code number > ");
+  scanf("%d", &(p->code));
+
+
+  // Check if the code already exists
+  for (int i = 0; i < csize; i++) {
+    if (c[i]->code == p->code) {
+      printf("Class with this code already exists. Cannot add.\n");
       return csize;
     }
   }
 
-  getchar(); // Clear input buffer
-  printf("Enter new class name: ");
-  fgets(newName, 30, stdin);
-  // Remove newline character at the end of the string
-  newName[strcspn(newName, "\n")] = 0;
+  
+  printf(">> class name > ");
+  scanf("%s", p->name);
+  printf(">> credits > ");
+  scanf("%d", &(p->unit));
+  printf(">> grading (1: A+~F, 2: P/F) > ");
+  scanf("%d", &(p->grading));
 
-  printf("Enter new class unit: ");
-  scanf("%d", &newUnit);
-
-  printf("Enter new class grading (1:A+~F, 2:P/F): ");
-  scanf("%d", &newGrading);
-
-  c[csize] = (struct st_class *)malloc(sizeof(struct st_class));
-  c[csize]->code = newCode;
-  strncpy(c[csize]->name, newName, 30);
-  c[csize]->unit = newUnit;
-  c[csize]->grading = newGrading;
-
+  c[csize] = p;
   return csize + 1;
 }
 
+// 3 
 void editClass(struct st_class *c[], int csize) {
-  // Edit class information
-  // Additional implementation required
-  int editCode;
+  struct st_class* p;
+  int code;
+  printf(">> Enter a code of class > ");
+  scanf("%d", &code);
+
+
+  /////////////
   int found = 0;
-
-  printf("Enter the class code to edit: ");
-  scanf("%d", &editCode);
-
   for (int i = 0; i < csize; i++) {
-    if (c[i]->code == editCode) {
+    if (c[i]->code == code) {
       found = 1;
-
-      printf("Enter new name: ");
-      getchar(); // Clear input buffer
-      fgets(c[i]->name, 30, stdin);
-      c[i]->name[strcspn(c[i]->name, "\n")] = 0; // Remove newline character
-
-      printf("Enter new unit: ");
-      scanf("%d", &c[i]->unit);
-
-      printf("Enter new grading (1:A+~F, 2:P/F): ");
-      scanf("%d", &c[i]->grading);
-
-      printf("Class information updated successfully.\n");
+      printf("> Current: [%d] %s [credits %d - %s]\n", c[i]->code, c[i]->name,
+             c[i]->unit, kname[c[i]->grading - 1]);
+      printf("> Enter new class name > ");
+      scanf("%s", c[i]->name);
+      printf("> Enter new credits > ");
+      scanf("%d", &(c[i]->unit));
+      printf("> Enter new grading(1: Grade, 2: P/F) > ");
+      scanf("%d", &(c[i]->grading));
+      printf("> Modified.\n");
       break;
     }
   }
 
   if (!found) {
-    printf("Class code not found.\n");
+    printf("Class with code %d not found. Cannot edit.\n", code);
   }
 }
 
-void findClasses(struct st_class *c[], int csize) {
-  // Find classes by name
-  // Implementation provided
+// 5 
+int applyMyClasses(int my[], int msize, struct st_class *c[], int csize) {
+  int code;
+  printf("Enter the class code to apply (0 to finish): ");
+
+  while (1) {
+    scanf("%d", &code);
+    if (code == 0) {
+      break;
+    }
+
+    int exists = 0;
+    for (int i = 0; i < csize; i++) {
+      if (c[i]->code == code) {
+        exists = 1;
+        my[msize] = code;
+        msize++;
+        printf("Class %s applied.\n", c[i]->name);
+        break;
+      }
+    }
+
+    if (!exists) {
+      printf("Class with code %d does not exist. Cannot apply.\n", code);
+    }
+  }
+
+  return msize;
 }
 
-void applyMyClasses(int my[], int msize, struct st_class *c[], int csize) {
-  // Apply my classes
-  // Additional implementation required
-}
-
+// 6 
 void printMyClasses(int my[], int msize, struct st_class *c[], int csize) {
-  // Print my classes
-  // Implementation required
+  printf("My classes:\n");
+  for (int i = 0; i < msize; i++) {
+    for (int j = 0; j < csize; j++) {
+      if (my[i] == c[j]->code) {
+        printf("[%d] %s [credit %d - %s]\n", c[j]->code, c[j]->name, c[j]->unit,
+               kname[c[j]->grading - 1]);
+      }
+    }
+  }
 }
 
-void saveAllClasses(struct st_class *c[], int csize) {
-  // Save all classes to file
-  // Implementation provided
-}
-
+// 7
 void saveMyClass(int my[], int msize, struct st_class *c[], int csize) {
-  FILE *fp;
-  fp = fopen("my_classes.txt", "w");
+  FILE *file;
+  file = fopen("my_classes.txt", "w");
 
-  if (fp == NULL) {
-    printf("Error opening file\n");
-    return;
-  }
-
-  int totalCredits = 0;
-  int totalCourses = msize;
-
-  fprintf(fp, "과목코드\t과목명\t학점수\t평가방식\n");
+  int total_credits = 0;
+  int total_classes = msize;
+  int credits_ApF = 0;
+  int credits_PassF = 0;
 
   for (int i = 0; i < msize; i++) {
     for (int j = 0; j < csize; j++) {
       if (my[i] == c[j]->code) {
-        fprintf(fp, "%d\t%s\t%d\t%d\n", c[j]->code, c[j]->name, c[j]->unit,
+        fprintf(file, "%d %s %d %d\n", c[j]->code, c[j]->name, c[j]->unit,
                 c[j]->grading);
-        totalCredits += c[j]->unit;
+        total_credits += c[j]->unit;
+        if (c[j]->grading == 1) {
+          credits_ApF += c[j]->unit;
+        } else if (c[j]->grading == 2) {
+          credits_PassF += c[j]->unit;
+        }
+        break;
       }
     }
   }
 
-  int gradeCredits[2] = {0}; // Initialize grading credits array
-  for (int i = 0; i < msize; i++) {
-    for (int j = 0; j < csize; j++) {
-      if (my[i] == c[j]->code) {
-        gradeCredits[c[j]->grading - 1] += c[j]->unit;
-      }
-    }
-  }
+  fprintf(file, "Total credits: %d\n", total_credits);
+  fprintf(file, "Total classes: %d\n", total_classes);
+  fprintf(file, "Total credits for A+~F: %d\n", credits_ApF);
+  fprintf(file, "Total credits for P/F: %d\n", credits_PassF);
 
-  fprintf(fp, "\n총 수강학점: %d\n", totalCredits);
-  fprintf(fp, "A+~F 평가방식 수강학점: %d\n", gradeCredits[0]);
-  fprintf(fp, "P/F 평가방식 수강학점: %d\n", gradeCredits[1]);
-  fprintf(fp, "수강과목수: %d\n", totalCourses);
-
-  fclose(fp);
+  fclose(file);
 }
 
-int main() {
-  struct st_class *classes[100];
-  int numClasses = 0;
+////////////////////////////////////////////////////////////////////////////////
 
-  LoadData(classes, &numClasses);
+int main(void) {
+  int no;
+  struct st_class *classes[50];
+  int myclass[10];
+  int mycount = 0;
+  srand(time(0));
+  int count = loadData(classes);
+  printf("> Load %d classes.\n", count);
 
-  // Menu-driven program
-  int choice;
-  do {
-    printf("\nMenu:\n");
-    printf("1. Print all classes\n");
-    printf("2. Add a new class\n");
-    printf("3. Edit a class\n");
-    printf("4. Find classes\n");
-    printf("5. Apply my classes\n");
-    printf("6. Print my classes\n");
-    printf("7. Save all classes\n");
-    printf("8. Save my classes\n");
-    printf("0. Exit\n");
-    printf("Enter your choice: ");
-    scanf("%d", &choice);
+  while (1) {
+    printf("\n> Menu 1.List 2.Add 3.Modify 4.Search 5.Apply 6.My classes "
+           "7.Save 0.Quit\n");
+    printf(">> Menu? > ");
+    scanf("%d", &no);
 
-    switch (choice) {
-    case 1:
-      printAllClasses(classes, numClasses);
+    if (no == 1) {
+      printf("> 1.Class list (%d classes)\n", count);
+      printAllClasses(classes, count);
+    } else if (no == 2) {
+      printf("> 2.Add a Class\n");
+      count = addNewClass(classes, count);
+    } else if (no == 3) {
+      printf("> 3.Modify a Class\n");
+      editClass(classes, count);
+    } else if (no == 4) {
+      printf("> 4.Search a Class\n");
+      printf(">> Enter class name > ");
+      char name[30];
+      scanf("%s", name);
+      findClasses(name, classes, count);
+    } else if (no == 5) {
+      printf("> 5.Apply a class\n");
+      mycount = applyMyClasses(myclass, mycount, classes, count);
+      printf("%d classes has been applied.\n", mycount);
+    } else if (no == 6) {
+      printf("> 6.My classes\n");
+      printMyClasses(myclass, mycount, classes, count);
+    } else if (no == 7) {
+      printf("> 7.Save\n");
+      saveMyClass(myclass, mycount, classes, count);
+      printf("\n> All my classes ware saved to my_classes.txt.\n");
+      saveAllClasses(classes, count);
+      printf("\n> All of class list ware saved to classes.txt.\n");
+    } else
       break;
-    case 2:
-      numClasses = addNewClass(classes, numClasses);
-      break;
-    case 3:
-      editClass(classes, numClasses);
-      break;
-    case 4:
-      findClasses(classes, numClasses);
-      break;
-    case 5:
-      // applyMyClasses();
-      break;
-    case 6:
-      // printMyClasses();
-      break;
-    case 7:
-      saveAllClasses(classes, numClasses);
-      break;
-    case 8:
-      // saveMyClass();
-      break;
-    case 0:
-      printf("Exiting program.\n");
-      break;
-    default:
-      printf("Invalid choice. Please try again.\n");
-    }
-  } while (choice != 0);
-
+  }
   return 0;
 }
