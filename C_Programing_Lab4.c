@@ -12,7 +12,7 @@ struct st_class {
 
 char kname[2][10] = {"A+~F", "P/F"}; // String for grading
 
-// 1 ok
+// 데이터 로드 함수
 
 int loadData(struct st_class *c[]) {
   int count = 0;
@@ -31,7 +31,7 @@ int loadData(struct st_class *c[]) {
   return count;
 }
 
-// ok
+// 모든 과목 출력 함수
 void printAllClasses(struct st_class *c[], int csize) {
   for (int i = 0; i < csize; i++) {
     printf("[%d] %s [credit %d - %s]\n", c[i]->code, c[i]->name, c[i]->unit,
@@ -65,24 +65,29 @@ void findClasses(char *name, struct st_class *c[], int csize) {
 }
 
 /////////////////////////////////////////////////////////////////////////////////
+///여기서부터 본래 코드와 다른점
 
-// 2 
+/* 2
+  메모리 할당후 과목 코드 입력 요청한다음
+  중첩문을 통해  중복 코드를 확인하면 된다.
+  이때 이미 존재하는 코드라면 변경없이 과목수를 리턴해주면된다.
+  아니라면 새로운 과목을 배열에 추가후 / csize+1을 리턴해준다.
+
+  */
 int addNewClass(struct st_class *c[], int csize) {
-  struct st_class *p = (struct st_class *)malloc(sizeof(struct st_class));
+  struct st_class *p =
+      (struct st_class *)malloc(sizeof(struct st_class)); //메모리할당
 
   printf(">> code number > ");
   scanf("%d", &(p->code));
 
-
-  // Check if the code already exists
   for (int i = 0; i < csize; i++) {
-    if (c[i]->code == p->code) {
+    if (c[i]->code == p->code) { // 이미 존재시 처리
       printf("Class with this code already exists. Cannot add.\n");
       return csize;
     }
   }
 
-  
   printf(">> class name > ");
   scanf("%s", p->name);
   printf(">> credits > ");
@@ -90,17 +95,19 @@ int addNewClass(struct st_class *c[], int csize) {
   printf(">> grading (1: A+~F, 2: P/F) > ");
   scanf("%d", &(p->grading));
 
-  c[csize] = p;
+  c[csize] = p; // 배열에 추가
   return csize + 1;
 }
 
-// 3 
+/*3 과목 수정함수에서 과목을 찾았을 때 현재과목 정보를 출력하고 , 수정된
+  과목정보를 입력 받아야한다. 못 찾을 시 메세지를 출력한다.
+
+  */
 void editClass(struct st_class *c[], int csize) {
-  struct st_class* p;
+  struct st_class *p;
   int code;
   printf(">> Enter a code of class > ");
   scanf("%d", &code);
-
 
   /////////////
   int found = 0;
@@ -125,7 +132,13 @@ void editClass(struct st_class *c[], int csize) {
   }
 }
 
-// 5 
+/* 5 수강 신청함수는  일단 0입력시에 종료가 되어야한다.
+  과목 존재여부에 따라 있을 시에 과목 코드로 찾아야하고
+  내 수강 과목에 추가하고, 수강 과목 수가 증가되어야한다.
+
+  그 후에 업데이트된 수강 과목수를 리턴받으면 된다.
+
+  */
 int applyMyClasses(int my[], int msize, struct st_class *c[], int csize) {
   int code;
   printf("Enter the class code to apply (0 to finish): ");
@@ -155,7 +168,9 @@ int applyMyClasses(int my[], int msize, struct st_class *c[], int csize) {
   return msize;
 }
 
-// 6 
+/*6 수강 과목 출력함수는 중첩문을 통해
+  코드로 과목을 찾고 , 정보를 출력한다.
+  */
 void printMyClasses(int my[], int msize, struct st_class *c[], int csize) {
   printf("My classes:\n");
   for (int i = 0; i < msize; i++) {
@@ -168,7 +183,12 @@ void printMyClasses(int my[], int msize, struct st_class *c[], int csize) {
   }
 }
 
-// 7
+/* 7 저장함수는  파일을 쓰기 모드로 열고
+  총학점, 수강 과목 수 , 그레이드 , 패스페일 유무를 입력한다.
+
+  중첩문을 이용해 코드로 과목을 찾고 , 파일에 쓰기모드를 이용해 총 학점과
+  ,페스페일 유무에 따른 학점을 계산한다.
+ */
 void saveMyClass(int my[], int msize, struct st_class *c[], int csize) {
   FILE *file;
   file = fopen("my_classes.txt", "w");
