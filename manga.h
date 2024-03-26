@@ -5,7 +5,7 @@
 #define MAX_TITLE 100
 #define MAX_AUTHOR 50
 #define MAX_GENRE 30
-#define MAX_MANGAS 100 // Define MAX_MANGAS here, adjust 100 to your needs
+#define MAX_MANGAS 100 
 
 typedef struct {
   char title[MAX_TITLE];
