@@ -44,7 +44,9 @@ void updateManga(Manga mangas[], int count) {
   }
 
   printf("Enter new title: ");
-  scanf("%s", mangas[index].title);
+  // Instead of scanf("%s", mangas[index].title);
+  // Use:
+  fgets(mangas[index].title, MAX_TITLE, stdin);
   // Repeat for author, weeklyRank, monthlyRank, and genre with appropriate
   // prompts and scanf
   
@@ -171,4 +173,6 @@ int main() {
       ;
   } while (choice != 7);
   return 0;
+  // Clear input buffer asdad
+  while (getchar() != '\n');
 }
