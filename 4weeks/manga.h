@@ -12,7 +12,7 @@ typedef struct {
   char author[MAX_AUTHOR];
   int weeklyRank;
   int monthlyRank;
-  char genre[MAX_GENRE];
+  
 } Manga;
 
 void printAllMangas(Manga *mangas, int count);
