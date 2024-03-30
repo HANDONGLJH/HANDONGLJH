@@ -16,7 +16,8 @@ typedef struct {
 } Manga;
 
 void printAllMangas(Manga *mangas, int count);
-int addManga(Manga **mangas, int count);
+int addManga(Manga **mangas, int count, const char *title, const char *author,
+             int weeklyRank, int monthlyRank);
 void updateManga(Manga *mangas, int count);
 void deleteManga(Manga *mangas, int count);
 int loadMangas(Manga **mangas, const char *filename);

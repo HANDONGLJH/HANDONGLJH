@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-int addManga(Manga **mangas, int count) {
+int addManga(Manga **mangas, int count, const char *title, const char *author,
+             int weeklyRank, int monthlyRank) {
   if (count >= MAX_MANGAS) {
     printf("Maximum number of mangas reached.\n");
     return count;
@@ -15,24 +16,27 @@ int addManga(Manga **mangas, int count) {
     exit(EXIT_FAILURE);
   }
 
-  printf("Enter title: ");
-  fgets((*mangas)[count].title, MAX_TITLE, stdin);
-  size_t len = strlen((*mangas)[count].title);
-  if (len > 0 && (*mangas)[count].title[len - 1] == '\n') {
-    (*mangas)[count].title[len - 1] = '\0';
-  }
-  // Handle inputs for author, weeklyRank, monthlyRank, and genre similarly
+  // Copying the provided data into the new manga record
+  strncpy((*mangas)[count].title, title, MAX_TITLE);
+  (*mangas)[count].title[MAX_TITLE - 1] = '\0'; // Ensure null-termination
 
-  saveMangas(*mangas, count + 1, "mangas.txt");
-  return count + 1;
+  strncpy((*mangas)[count].author, author, MAX_AUTHOR);
+  (*mangas)[count].author[MAX_AUTHOR - 1] = '\0'; // Ensure null-termination
+
+  (*mangas)[count].weeklyRank = weeklyRank;
+  (*mangas)[count].monthlyRank = monthlyRank;
+
+  count++;
+
+  return count;
 }
 
 void printAllMangas(Manga *mangas, int count) {
   printf("\nList of All Mangas:\n");
   for (int i = 0; i < count; ++i) {
-    printf("%d: %s by %s, Weekly Rank: %d, Monthly Rank: %d, Genre: %s\n",
-           i + 1, mangas[i].title, mangas[i].author, mangas[i].weeklyRank,
-           mangas[i].monthlyRank, mangas[i].genre);
+    printf("%d: %s by %s, Weekly Rank: %d, Monthly Rank: %d, \n", i + 1,
+           mangas[i].title, mangas[i].author, mangas[i].weeklyRank,
+           mangas[i].monthlyRank);
   }
 }
 
@@ -56,9 +60,25 @@ void updateManga(Manga *mangas, int count) {
   if (len > 0 && mangas[index].title[len - 1] == '\n') {
     mangas[index].title[len - 1] = '\0';
   }
-  // Repeat for other attributes
 
-  saveMangas(mangas, count, "mangas.txt");
+  printf("Enter new author: ");
+  fgets(mangas[index].author, MAX_AUTHOR, stdin);
+  len = strlen(mangas[index].author);
+  if (len > 0 && mangas[index].author[len - 1] == '\n') {
+    mangas[index].author[len - 1] = '\0';
+  }
+
+  printf("Enter new weekly rank: ");
+  scanf("%d", &mangas[index].weeklyRank);
+  while (getchar() != '\n')
+    ;
+
+  printf("Enter new monthly rank: ");
+  scanf("%d", &mangas[index].monthlyRank);
+  while (getchar() != '\n')
+    ;
+
+  printf("Manga updated successfully.\n");
 }
 
 void deleteManga(Manga *mangas, int count) {
@@ -77,7 +97,6 @@ void deleteManga(Manga *mangas, int count) {
   }
 
   printf("Manga deleted successfully.\n");
-  saveMangas(mangas, count - 1, "mangas.txt");
 }
 
 int loadMangas(Manga **mangas, const char *filename) {
@@ -95,9 +114,9 @@ int loadMangas(Manga **mangas, const char *filename) {
   }
 
   int count = 0;
-  while (fscanf(file, "%[^,],%[^,],%d,%d,%[^\n]\n", (*mangas)[count].title,
+  while (fscanf(file, "%[^,],%[^,],%d,%d\n", (*mangas)[count].title,
                 (*mangas)[count].author, &(*mangas)[count].weeklyRank,
-                &(*mangas)[count].monthlyRank, (*mangas)[count].genre) == 5) {
+                &(*mangas)[count].monthlyRank) == 5) {
     count++;
     if (count >= MAX_MANGAS)
       break;
@@ -115,8 +134,8 @@ void saveMangas(Manga *mangas, int count, const char *filename) {
   }
 
   for (int i = 0; i < count; ++i) {
-    fprintf(file, "%s,%s,%d,%d,%s\n", mangas[i].title, mangas[i].author,
-            mangas[i].weeklyRank, mangas[i].monthlyRank, mangas[i].genre);
+    fprintf(file, "%s,%s,%d,%d\n", mangas[i].title, mangas[i].author,
+            mangas[i].weeklyRank, mangas[i].monthlyRank);
   }
 
   fclose(file);
@@ -127,11 +146,10 @@ int findMangas(Manga *mangas, int count, const char *searchKeyword) {
   int foundCount = 0;
   for (int i = 0; i < count; ++i) {
     if (strstr(mangas[i].title, searchKeyword) ||
-        strstr(mangas[i].author, searchKeyword) ||
-        strstr(mangas[i].genre, searchKeyword)) {
-      printf("%d: %s by %s, Weekly Rank: %d, Monthly Rank: %d, Genre: %s\n",
-             i + 1, mangas[i].title, mangas[i].author, mangas[i].weeklyRank,
-             mangas[i].monthlyRank, mangas[i].genre);
+        strstr(mangas[i].author, searchKeyword)) {
+      printf("%d: %s by %s, Weekly Rank: %d, Monthly Rank: %d, \n", i + 1,
+             mangas[i].title, mangas[i].author, mangas[i].weeklyRank,
+             mangas[i].monthlyRank);
       foundCount++;
     }
   }
@@ -162,21 +180,43 @@ int main() {
     case 1:
       printAllMangas(mangas, count);
       break;
-    case 2:
-      mangas = realloc(mangas,
-                       (count + 1) * sizeof(Manga)); // Reallocate for new manga
-      count = addManga(&mangas, count);
+    case 2: {
+      char title[MAX_TITLE], author[MAX_AUTHOR];
+      int weeklyRank, monthlyRank;
+
+      printf("Enter manga title: ");
+      fgets(title, MAX_TITLE, stdin);
+      size_t len = strlen(title);
+      if (len > 0 && title[len - 1] == '\n') {
+        title[len - 1] = '\0';
+      }
+
+      printf("Enter manga author: ");
+      fgets(author, MAX_AUTHOR, stdin);
+      len = strlen(author);
+      if (len > 0 && author[len - 1] == '\n') {
+        author[len - 1] = '\0';
+      }
+
+      printf("Enter weekly rank: ");
+      scanf("%d", &weeklyRank);
+      while (getchar() != '\n')
+        ;
+
+      printf("Enter monthly rank: ");
+      scanf("%d", &monthlyRank);
+      while (getchar() != '\n')
+        ;
+
+      count = addManga(&mangas, count, title, author, weeklyRank, monthlyRank);
       break;
+    }
     case 3:
       updateManga(mangas, count);
       break;
     case 4:
       deleteManga(mangas, count);
       count--; // Update count after deletion
-      mangas = realloc(
-          mangas,
-          count *
-              sizeof(Manga)); // Reallocate to shrink the array after deletion
       break;
     case 5:
       saveMangas(mangas, count, "mangas.txt");
@@ -185,7 +225,6 @@ int main() {
       char keyword[100];
       printf("Enter search keyword: ");
       fgets(keyword, 100, stdin);
-      // Remove newline character from fgets
       size_t len = strlen(keyword);
       if (len > 0 && keyword[len - 1] == '\n') {
         keyword[len - 1] = '\0';
@@ -193,7 +232,6 @@ int main() {
       findMangas(mangas, count, keyword);
       break;
     }
-
     case 7:
       printf("Exiting...\n");
       break;
@@ -202,6 +240,6 @@ int main() {
     }
   } while (choice != 7);
 
-  free(mangas); // Free the dynamic array before exiting
+  free(mangas); // Free the allocated memory for mangas before exiting
   return 0;
 }
