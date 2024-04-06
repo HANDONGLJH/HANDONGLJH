@@ -6,72 +6,63 @@ public class Main {
 
   public static void main(String[] args) {
     Main pStudio = new Main();
-    // Scanner scanner = new Scanner(System.in); // This line is now removed because
-    // scanner is declared at class level
     while (true) {
       System.out.println("실행하고 싶은 문제 번호를 입력하세요. 종료하려면 -1을 입력하세요.");
-
       // 사용자로부터 문제 번호를 입력받음
       int problemNumber = scanner.nextInt();
-      if (scanner.hasNextInt()) {
-        int number = scanner.nextInt();
-        System.out.println("You entered: " + number);
-        // Additional logic to use 'number'
-      } else {
-        System.out.println("No integer input provided.");
-        // 종료 조건 체크
-        if (problemNumber == -1) {
-          System.out.println("프로그램을 종료합니다.");
-          scanner.close(); // Close scanner here before breaking
-          break;
-        }
-
-        // 입력받은 번호에 따라 해당 문제 실행
-        switch (problemNumber) {
-          case 1:
-            pStudio.solveJ001();
-            break;
-
-          case 2:
-            pStudio.solveJ002();
-            break;
-          case 3:
-            pStudio.solveJ003();
-            break;
-          case 5:
-            pStudio.solveJ005();
-            break;
-          case 11:
-            pStudio.solveJ011();
-            break;
-          case 12:
-            pStudio.solveJ012();
-            break;
-          case 15:
-            pStudio.solveJ015();
-            break;
-          case 21:
-            pStudio.solveJ021();
-            break;
-          case 24:
-            pStudio.solveJ024();
-            break;
-          case 25:
-            pStudio.solveJ025();
-            break;
-          case 29:
-            pStudio.solveJ029();
-            break;
-          case 30:
-            pStudio.solveJ030();
-            break;
-
-          default:
-            System.out.println("해당 번호의 문제는 존재하지 않습니다.");
-        }
+      // 종료 조건 체크
+      if (problemNumber == -1) {
+        System.out.println("프로그램을 종료합니다.");
+        scanner.close(); // 프로그램 종료 전에 한 번만 Scanner를 닫습니다.
+        break;
       }
 
+      // 입력받은 번호에 따라 해당 문제 실행
+      switch (problemNumber) {
+        case 1:
+          pStudio.solveJ001();
+          break;
+
+        case 2:
+          pStudio.solveJ002();
+          break;
+        case 3:
+          pStudio.solveJ003();
+          break;
+        case 5:
+          pStudio.solveJ005();
+          break;
+        case 11:
+          pStudio.solveJ011();
+          break;
+        case 12:
+          pStudio.solveJ012();
+          break;
+        case 15:
+          pStudio.solveJ015();
+          break;
+        case 21:
+          pStudio.solveJ021();
+          break;
+        case 24:
+          pStudio.solveJ024();
+          break;
+        case 25:
+          pStudio.solveJ025();
+          break;
+        case 29:
+          pStudio.solveJ029();
+          break;
+        case 30:
+          pStudio.solveJ030();
+          break;
+
+        default:
+          System.out.println("해당 번호의 문제는 존재하지 않습니다.");
+      }
     }
+    scanner.close();
+
   }
 
   void solveJ001() {
