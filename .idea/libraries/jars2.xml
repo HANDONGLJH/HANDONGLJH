@@ -1,0 +1,18 @@
+<component name="libraryTable">
+  <library name="jars2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/59/0/.cp/jars/lucene-highlighter-5.5.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/59/0/.cp/jars/lucene-backward-codecs-5.5.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/59/0/.cp/jars/lucene-queryparser-5.5.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/59/0/.cp/jars/lucene-memory-5.5.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/59/0/.cp/jars/lucene-join-5.5.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/59/0/.cp/jars/lucene-sandbox-5.5.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/59/0/.cp/jars/lucene-core-5.5.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/59/0/.cp/jars/indexer-core-6.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/59/0/.cp/jars/lucene-analyzers-common-5.5.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/59/0/.cp/jars/lucene-queries-5.5.5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,22 @@
+<component name="libraryTable">
+  <library name="jars1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/54/0/.cp/jars/archetype-registry-2.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/54/0/.cp/jars/archetype-descriptor-2.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/54/0/.cp/jars/maven-invoker-2.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/54/0/.cp/jars/commons-lang-2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/54/0/.cp/jars/plexus-velocity-1.1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/54/0/.cp/jars/commons-io-2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/54/0/.cp/jars/archetype-common-2.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/54/0/.cp/jars/archetype-catalog-2.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/54/0/.cp/jars/dom4j-2.1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/54/0/.cp/jars/jchardet-1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/54/0/.cp/jars/oro-2.0.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/54/0/.cp/jars/velocity-1.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/54/0/.cp/jars/jdom-1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/.cache/jdt-language-server/config/org.eclipse.osgi/54/0/.cp/jars/commons-collections-3.2.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
