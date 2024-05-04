@@ -26,7 +26,7 @@ class ChatThread extends Thread{
 	private String id;		
 	private BufferedReader br;		
 	private HashMap hm;		
-	private boolean initFlag = false;		
+		
 	public ChatThread(Socket sock, HashMap hm){		
 		this.sock = sock;	
 		this.hm = hm;	
@@ -39,7 +39,6 @@ class ChatThread extends Thread{
 			synchronized(hm){	
 				hm.put(this.id, pw);
 			}	
-			initFlag = true;	
 		}catch(Exception ex){		
 			System.out.println(ex);	
 		}		
