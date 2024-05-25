@@ -1,0 +1,6 @@
+401 Capstone2 4 1
+304 Capstone1 2 2
+Total credits: 6
+P/F credits: 2
+A+~F credits: 4
+Total classes: 2
